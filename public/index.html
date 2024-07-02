@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <input type="file" id="inputFile" />
+    <button type="button" id="uploadBtn">Upload</button>
+
+    <br />
+    <br />
+    <br />
+
+    <textarea
+      style="width: 600px; height: 400px"
+      id="resultText"
+      placeholder="Parsed Text will appear here..."
+    ></textarea>
+
+    <script>
+      uploadedFile = document.getElementById("inputFile");
+      uploadBtn = document.getElementById("uploadBtn");
+      resultText = document.getElementById("resultText");
+
+      uploadBtn.addEventListener("click", () => {
+        const formData = new FormData();
+
+        formData.append("pdfFile", uploadedFile.files[0]);
+
+        fetch("/extract-text", {
+          method: "post",
+          body: formData,
+        })
+          .then((response) => {
+            return response.text();
+          })
+          .then((extractedText) => {
+            resultText.value = extractedText;
+          });
+      });
+    </script>
+  </body>
+</html>
